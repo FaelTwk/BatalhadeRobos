@@ -2,8 +2,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-
-    // Prepara o jogo e inicia a batalha.
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
@@ -11,11 +9,15 @@ public class Main {
         System.out.println("=== CRIAÇÃO DO ROBÔ ===");
 
         Robo jogador = criarRobo(scanner);
+        montarPecas(scanner, jogador);
 
         System.out.println("\nSeu robô foi criado!");
-        jogador.exibirStatus();
+        jogador.exibirFicha();
 
         Robo inimigo = criarInimigo(random);
+        equiparAleatoriamente(random, inimigo);
+        System.out.println("Ficha do adversário:");
+        inimigo.exibirFicha();
 
         iniciarBatalha(scanner, random, jogador, inimigo);
 
@@ -131,6 +133,43 @@ public class Main {
                 throw new IllegalArgumentException("Tipo de robô desconhecido.");
         }
     }
+    // Deixa o jogador escolher uma peça (ou nenhuma) para cada slot.
+    private static void montarPecas(Scanner scanner, Robo robo) {
+        System.out.println("\n=== MONTAGEM DE PEÇAS ===");
+        System.out.println("Toda peça tem bônus e penalidade. Escolha com cuidado!");
+
+        for (int slot = 0; slot < Catalogo.totalSlots(); slot++) {
+            Peca[] opcoes = Catalogo.getOpcoes(slot);
+
+            String[] menu = new String[opcoes.length + 1];
+            menu[0] = "Nenhuma peça";
+
+            for (int i = 0; i < opcoes.length; i++) {
+                menu[i + 1] = opcoes[i].resumo();
+            }
+
+            System.out.println("\nSlot: " + Catalogo.NOMES_SLOTS[slot]);
+            exibirMenu(menu);
+
+            int escolha = lerOpcao(scanner, menu.length);
+
+            if (escolha > 1) {
+                robo.equipar(opcoes[escolha - 2]);
+            }
+        }
+    }
+
+    // O adversário recebe uma peça aleatória (ou nenhuma) em cada slot.
+    private static void equiparAleatoriamente(Random random, Robo robo) {
+        for (int slot = 0; slot < Catalogo.totalSlots(); slot++) {
+            Peca[] opcoes = Catalogo.getOpcoes(slot);
+            int sorteio = random.nextInt(opcoes.length + 1);
+
+            if (sorteio > 0) {
+                robo.equipar(opcoes[sorteio - 1]);
+            }
+        }
+    }
 
     // Sorteia um dos cinco tipos de adversário.
     private static Robo criarInimigo(Random random) {
@@ -239,6 +278,7 @@ public class Main {
 
     // Executa a ação escolhida no alvo indicado.
     private static void executarAcao(int acao, Robo robo, Robo alvo) {
+        robo.encerrarDefesa();
         switch (acao) {
             case 1:
                 robo.atacar(alvo);

@@ -9,6 +9,7 @@ public abstract class Robo {
     private int velocidade;
     private boolean defendendo;
     private int pocoes;
+    private final Peca[] pecas = new Peca[Catalogo.totalSlots()];
 
     public static final int CUSTO_ESPECIAL = 20;
 
@@ -45,6 +46,10 @@ public abstract class Robo {
     public void defender() {
         defendendo = true;
         System.out.println(nome + " se preparou para defender!");
+    }
+
+    public void encerrarDefesa() {
+        defendendo = false;
     }
 
     public void usarHabilidadeEspecial(Robo alvo) {
@@ -98,7 +103,54 @@ public abstract class Robo {
         System.out.println(nome + " perdeu " + energiaRemovida + " de energia!");
     }
 
+    public void equipar(Peca nova) {
+        if (nova == null) {
+            return;
+        }
 
+        Peca antiga = pecas[nova.getSlot()];
+
+        if (antiga != null) {
+            aplicarPeca(antiga, -1);
+        }
+
+        aplicarPeca(nova, 1);
+        pecas[nova.getSlot()] = nova;
+
+        // O robô começa a batalha com os valores máximos já atualizados
+        vida = vidaMaxima;
+        energia = energiaMaxima;
+    }
+
+
+    private void aplicarPeca(Peca peca, int sinal) {
+        vidaMaxima    = vidaMaxima    + sinal * peca.getBonusVida();
+        energiaMaxima = energiaMaxima + sinal * peca.getBonusEnergia();
+        ataque        = ataque        + sinal * peca.getBonusAtaque();
+        defesa        = defesa        + sinal * peca.getBonusDefesa();
+        velocidade    = velocidade    + sinal * peca.getBonusVelocidade();
+
+        // Nenhum atributo pode ficar abaixo do mínimo
+        if (vidaMaxima < 1)    vidaMaxima = 1;
+        if (energiaMaxima < 0) energiaMaxima = 0;
+        if (ataque < 1)        ataque = 1;
+        if (defesa < 0)        defesa = 0;
+        if (velocidade < 1)    velocidade = 1;
+    }
+
+    // Mostra os atributos completos e as peças equipadas.
+    public void exibirFicha() {
+        System.out.println(nome + " | VIDA " + vidaMaxima + " | ENERGIA " + energiaMaxima
+                + " | ATAQUE " + ataque + " | DEFESA " + defesa + " | VELOCIDADE " + velocidade);
+
+        String[] nomes = new String[pecas.length];
+
+        for (int i = 0; i < pecas.length; i++) {
+            nomes[i] = (pecas[i] == null) ? "-" : pecas[i].getNome();
+        }
+
+        System.out.println("Peças: " + String.join(", ", nomes));
+    }
 
     public void usarItem() {
         if (!podeUsarItem()) {
