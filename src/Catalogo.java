@@ -1,5 +1,5 @@
 import java.util.Arrays;
-// Catálogo de peças em uma MATRIZ: cada linha é um slot, cada coluna é uma peça.
+// Catálogo de peças numa MATRIZ: cada linha é um slot, cada coluna é uma peça.
 
 public class Catalogo {
 
