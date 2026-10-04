@@ -28,15 +28,16 @@ public class Main {
         Historico historico = new Historico();
         jogador.setHistorico(historico);
         inimigo.setHistorico(historico);
-        historico.registrar("JOGADOR: " + jogador.resumoFicha());
-        historico.registrar("INIMIGO: " + inimigo.resumoFicha());
+        historico.mostrar("JOGADOR: " + jogador.resumoFicha());
+        historico.mostrar("INIMIGO: " + inimigo.resumoFicha());
         int turno = 1;
         boolean fugiu = false;
 
         while (jogador.estaVivo() && inimigo.estaVivo()) {
-            historico.registrar("\n========== TURNO " + turno + " ==========");
-            historico.registrar("SEU ROBÔ:\n" + jogador.resumoStatus());
-            historico.registrar("INIMIGO:\n" + inimigo.resumoStatus());
+            historico.mostrar("\n========== TURNO " + turno + " ==========");
+            historico.mostrar("SEU ROBÔ:\n" + jogador.resumoStatus());
+            historico.mostrar("INIMIGO:\n" + inimigo.resumoStatus());
+            historico.anotar("T" + turno + " | " + jogador.resumoCompacto() + " | " + inimigo.resumoCompacto());
 
             // Cada variável guarda uma informação, sem índices escondidos.
             int acaoJogador;
@@ -54,7 +55,7 @@ public class Main {
             if (acaoInimigo == 4) {
                 itemInimigo = escolherItemComputador(random, inimigo);
             }
-            historico.registrar("\n--- AÇÕES ---");
+            historico.mostrar("\n--- AÇÕES ---");
 
             if (acaoJogador == 5) {
                 // A tentativa acontece antes dos ataques e gasta a ação do jogador.
@@ -89,7 +90,7 @@ public class Main {
             }
         }
 
-        historico.registrar("\n=== FIM DA BATALHA ===");
+        historico.mostrar("\n=== FIM DA BATALHA ===");
         if (fugiu) {
             historico.registrar("Você fugiu da batalha.");
         } else if (jogador.estaVivo()) {
@@ -98,7 +99,8 @@ public class Main {
             historico.registrar("Você perdeu! " + jogador.getNome() + " foi derrotado.");
         }
         historico.registrar("Rodadas: " + turno);
-        historico.registrar("Estado final:\n" + jogador.resumoStatus() + "\n" + inimigo.resumoStatus());
+        historico.mostrar("Estado final:\n" + jogador.resumoStatus() + "\n" + inimigo.resumoStatus());
+        historico.anotar("FIM | " + jogador.resumoCompacto() + " | " + inimigo.resumoCompacto());
 
         Path arquivo = Path.of("historico-batalhas.txt").toAbsolutePath();
         try {

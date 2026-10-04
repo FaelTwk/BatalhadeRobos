@@ -142,7 +142,15 @@ public abstract class Robo {
         }
         int recuperacao = energia - energiaAntes;
         if (recuperacao > 0) {
-            registrar(nome + " recuperou " + recuperacao + " de energia.");
+            exibir(nome + " recuperou " + recuperacao + " de energia.");
+        }
+    }
+
+    private void exibir(String mensagem) {
+        if (historico == null) {
+            System.out.println(mensagem);
+        } else {
+            historico.mostrar(mensagem);
         }
     }
 
@@ -271,6 +279,11 @@ public abstract class Robo {
         return String.format("%s%nVida: %s %d/%d%nEnergia: %s %d/%d",
                 nome, barra(vida, vidaMaxima), vida, vidaMaxima,
                 barra(energia, energiaMaxima), energia, energiaMaxima);
+    }
+
+    public String resumoCompacto() {
+        return String.format("%s PV %d/%d EN %d/%d",
+                nome, vida, vidaMaxima, energia, energiaMaxima);
     }
 
     public void exibirStatus() { System.out.println(resumoStatus()); }

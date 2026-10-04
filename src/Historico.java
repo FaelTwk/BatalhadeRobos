@@ -9,12 +9,21 @@ public class Historico {
     private final StringBuilder texto = new StringBuilder();
 
     public Historico() {
-        texto.append("\n=== NOVA BATALHA ===\n");
-        texto.append("Data e hora: " + LocalDateTime.now() + "\n");
+        String data = LocalDateTime.now().toString().substring(0, 16).replace('T', ' ');
+        texto.append("=== BATALHA ").append(data).append(" ===\n");
     }
 
     public void registrar(String mensagem) {
         System.out.println(mensagem);
+        texto.append(mensagem);
+        texto.append("\n");
+    }
+
+    public void mostrar(String mensagem) {
+        System.out.println(mensagem);
+    }
+
+    public void anotar(String mensagem) {
         texto.append(mensagem);
         texto.append("\n");
     }
