@@ -36,7 +36,7 @@ public class Main {
         while (jogador.estaVivo() && inimigo.estaVivo()) {
             historico.mostrar("\n========== TURNO " + turno + " ==========");
             historico.mostrar("SEU ROBÔ:\n" + jogador.resumoStatus());
-            historico.mostrar("INIMIGO:\n" + inimigo.resumoStatus());
+            historico.mostrar("\nINIMIGO:\n" + inimigo.resumoStatus());
             historico.anotar("T" + turno + " | " + jogador.resumoCompacto() + " | " + inimigo.resumoCompacto());
 
             // Cada variável guarda uma informação, sem índices escondidos.
