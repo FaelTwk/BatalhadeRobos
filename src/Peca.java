@@ -1,6 +1,5 @@
 import java.util.StringJoiner;
 // Peça de ‘upgrade’. Toda a peça tem BÔNUS e PENALIDADE (trade-off).
-// Implementa Comparable para poder ser ordenada com Arrays.sort().
 
 public class Peca implements Comparable<Peca> {
     private final String nome;
